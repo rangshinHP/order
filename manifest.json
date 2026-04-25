@@ -1,8 +1,8 @@
 {
   "name": "RANGSHIN_Order",
   "short_name": "RANGSHIN_Order",
-  "start_url": "/rangshin-order/",
-  "scope": "/rangshin-order/",
+  "start_url": "/order/",
+  "scope": "/order/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",

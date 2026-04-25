@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
+  <title>RANGSHIN_Order</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      overflow: hidden;
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
+      touch-action: manipulation;
+    }
+
+    body {
+      position: fixed;
+      inset: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .frameWrap {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    #appFrame {
+      border: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #fff;
+      overflow: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .bootSplash {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 24px;
+      text-align: center;
+      transition: opacity .28s ease, visibility .28s ease;
+    }
+
+    .bootSplash.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .bootLogo {
+      width: 88px;
+      height: 88px;
+      object-fit: contain;
+      margin-bottom: 14px;
+      border-radius: 20px;
+    }
+
+    .bootTitle {
+      font-size: 22px;
+      font-weight: 800;
+      color: #8b1e1e;
+      margin-bottom: 6px;
+      letter-spacing: .2px;
+    }
+
+    .bootSub {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 18px;
+    }
+
+    .bootDots {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bootDot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #d9b4b4;
+      animation: bootBounce 1.05s infinite ease-in-out;
+    }
+
+    .bootDot:nth-child(2) { animation-delay: .12s; }
+    .bootDot:nth-child(3) { animation-delay: .24s; }
+
+    @keyframes bootBounce {
+      0%, 80%, 100% {
+        transform: scale(.7);
+        opacity: .45;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .fabWrap {
+      position: fixed;
+      right: 14px;
+      bottom: max(14px, env(safe-area-inset-bottom));
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+
+    .fabBtn {
+      pointer-events: auto;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      background: #8b1e1e;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(0,0,0,.18);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .fabBtn.secondary {
+      background: #fff;
+      color: #8b1e1e;
+      border: 1px solid #8b1e1e;
+    }
+
+    .hintBox {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: calc(70px + env(safe-area-inset-bottom));
+      z-index: 9999;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      font: 15px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      display: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .hintBox b { color: #8b1e1e; }
+
+    .hintClose {
+      margin-top: 10px;
+      border: 0;
+      background: #8b1e1e;
+      color: #fff;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="frameWrap">
+    <iframe
+      id="appFrame"
+      allow="clipboard-write"
+      referrerpolicy="no-referrer"
+      loading="eager"
+    ></iframe>
+  </div>
+
+  <div class="bootSplash" id="bootSplash">
+    <img
+      class="bootLogo"
+      src="https://raw.githubusercontent.com/hahoang764/rangshin-assets/main/icon.png"
+      alt="RANGSHIN"
+    >
+    <div class="bootTitle">RANGSHIN</div>
+    <div class="bootSub">Đang mở ứng dụng…</div>
+    <div class="bootDots" aria-hidden="true">
+      <span class="bootDot"></span>
+      <span class="bootDot"></span>
+      <span class="bootDot"></span>
+    </div>
+  </div>
+
+  <div class="fabWrap">
+    <button class="fabBtn secondary" id="btnGuide">Cài app</button>
+  </div>
+
+  <div class="hintBox" id="hintBox">
+    <div id="hintText"></div>
+    <button class="hintClose" id="btnCloseHint">Đóng</button>
+  </div>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/rangshin-order/sw.js");
+    }
+
+    const WEBAPP = "https://script.google.com/macros/s/AKfycbySwXH-okG4IshKky0_mhmN749eB5AKgqxeuho7DL7Me-9IOCI-V1lPxarNXjJC7aMJ/exec";
+
+    const appFrame = document.getElementById("appFrame");
+    const bootSplash = document.getElementById("bootSplash");
+
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isInApp = /Zalo|FBAN|FBAV|Instagram|Messenger|Telegram/i.test(ua);
+
+    const hintBox = document.getElementById("hintBox");
+    const hintText = document.getElementById("hintText");
+    const btnGuide = document.getElementById("btnGuide");
+    const btnCloseHint = document.getElementById("btnCloseHint");
+
+    let splashHidden = false;
+
+    function hideSplash() {
+      if (splashHidden) return;
+      splashHidden = true;
+      bootSplash.classList.add("hide");
+    }
+
+    function buildWebAppUrl() {
+      const currentUrl = new URL(window.location.href);
+      const targetUrl = new URL(WEBAPP);
+
+      const forwardParams = [
+        "dinein",
+        "table",
+        "session"
+      ];
+
+      forwardParams.forEach(function(key) {
+        const value = currentUrl.searchParams.get(key);
+        if (value !== null && String(value).trim() !== "") {
+          targetUrl.searchParams.set(key, value);
+        }
+      });
+
+      return targetUrl.toString();
+    }
+
+    appFrame.addEventListener("load", function () {
+      setTimeout(hideSplash, 120);
+    });
+
+    setTimeout(hideSplash, 4500);
+
+    appFrame.src = buildWebAppUrl();
+
+    btnGuide.onclick = () => {
+      if (isInApp) {
+        hintText.innerHTML =
+          'Bạn đang mở trong <b>trình duyệt nhúng</b>.<br><br>' +
+          'Muốn cài app: bấm <b>⋮</b> → <b>Mở bằng trình duyệt</b> / <b>Open in browser</b>, rồi vào menu Chrome để thêm app ra màn hình chính.';
+      } else if (isIOS) {
+        hintText.innerHTML =
+          'Trên iPhone/iPad: bấm <b>Share</b> → <b>Add to Home Screen</b>.';
+      } else {
+        hintText.innerHTML =
+          'Trên Android Chrome: bấm <b>⋮</b> → <b>Install app</b> / <b>Thêm vào màn hình chính</b>.';
+      }
+      hintBox.style.display = "block";
+    };
+
+    btnCloseHint.onclick = () => {
+      hintBox.style.display = "none";
+    };
+
+    document.addEventListener("touchmove", function(){}, { passive: true });
+  </script>
+</body>
+</html>

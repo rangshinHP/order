@@ -1,0 +1,23 @@
+{
+  "name": "RANGSHIN_Order",
+  "short_name": "RANGSHIN_Order",
+  "start_url": "/rangshin-order/",
+  "scope": "/rangshin-order/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -67,18 +67,24 @@
     let scanned = false;
 
     function goBack(){
-      try{
-        if (scanner) {
-          scanner.stop().finally(function(){
-            window.location.href = "https://rangshinhp.github.io/order/";
-          });
-        } else {
-          window.location.href = "https://rangshinhp.github.io/order/";
-        }
-      }catch(e){
-        window.location.href = "https://rangshinhp.github.io/order/";
-      }
+  const homeUrl = "https://rangshinhp.github.io/order/";
+
+  try{
+    if (scanner && scanner.isScanning) {
+      scanner.stop()
+        .then(function(){
+          window.location.href = homeUrl;
+        })
+        .catch(function(){
+          window.location.href = homeUrl;
+        });
+    } else {
+      window.location.href = homeUrl;
     }
+  }catch(e){
+    window.location.href = homeUrl;
+  }
+}
 
     function startScan(){
       const status = document.getElementById("status");

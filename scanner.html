@@ -58,13 +58,15 @@
   <div class="sub">Hướng camera vào mã QR trên bàn để vào phiên gọi món hiện tại.</div>
 
   <div id="qrReader"></div>
-  <div id="status" class="status">Đang mở camera...</div>
+  <div id="status" class="status">Bấm “Bắt đầu quét” để mở camera.</div>
 
-  <button class="btn" onclick="goBack()">Quay lại</button>
+<button class="btn" onclick="startScan()">Bắt đầu quét QR</button>
+<button class="btn" style="background:#f3f3f3;color:#333" onclick="goBack()">Quay lại</button>
 
   <script>
     let scanner = null;
-    let scanned = false;
+let scanned = false;
+let starting = false;
 
     function goBack(){
   const homeUrl = "https://rangshinhp.github.io/order/";
@@ -88,6 +90,8 @@
 
     function startScan(){
       const status = document.getElementById("status");
+      if (starting) return;
+starting = true;
 
       if (typeof Html5Qrcode === "undefined"){
         status.textContent = "Không tải được bộ quét QR. Vui lòng thử lại.";
@@ -123,11 +127,11 @@
       ).then(function(){
         status.textContent = "Đưa QR vào giữa khung hình.";
       }).catch(function(err){
+        starting = false;
         status.innerHTML = "Không mở được camera.<br>Hãy kiểm tra quyền camera trong Safari/Chrome.";
       });
     }
 
-    startScan();
   </script>
 </body>
 </html>

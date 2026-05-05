@@ -94,9 +94,10 @@ let starting = false;
 starting = true;
 
       if (typeof Html5Qrcode === "undefined"){
-        status.textContent = "Không tải được bộ quét QR. Vui lòng thử lại.";
-        return;
-      }
+  starting = false;
+  status.textContent = "Không tải được bộ quét QR. Vui lòng thử lại.";
+  return;
+}
 
       scanner = new Html5Qrcode("qrReader");
 

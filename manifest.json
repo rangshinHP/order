@@ -1,6 +1,6 @@
 {
-  "name": "RANGSHIN_Order",
-  "short_name": "RANGSHIN_Order",
+  "name": "RANGSHIN Menu",
+  "short_name": "RANGSHIN",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
